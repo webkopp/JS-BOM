@@ -5,18 +5,53 @@
 // # ✨ Bonus
 // - Erstelle eine vierte Funktion speed, in der du die Millisekunden von deinem erstellten Intervall änderst
 
-function countdown() {
-    let count = 10
-    const display = document.getElementById("count")
+let catInterval
+let direction = "right"
+let speed = 100
 
-    let interval = setInterval(function() {
-        if(count > 0) {
-            count--
-            display.textContent = count
+// cat go
+function catWalk() {
+    catInterval = setInterval(function() {
+        const cat = document.getElementById("cat")
+        const currentPos = cat.offsetLeft
+        if (direction === "right") {
+            cat.style.left = (currentPos + 10) + "px"
         } else {
-            clearInterval(interval)
-            document.querySelector(".message").style.display = "none"
+            cat.style.left = (currentPos - 10) + "px"
         }
-    }, 1000)
+        if (currentPos >= window.innerWidth - cat.width && direction === "right") {
+            direction = "left"
+            cat.style.transform = "scaleX(-1)"
+        } else if (currentPos <= 0 && direction === "left") {
+            direction = "right"
+            cat.style.transform = "scaleX(1)"
+        }
+    }, speed)
 }
-countdown()
+
+// cat stopp
+function pause() {
+    clearInterval(catInterval)
+}
+
+// cat turn
+function turn() {
+    const cat = document.getElementById("cat")
+    if (direction === "right") {
+        direction = "left"
+        cat.style.transform = "scaleX(-1)"
+    } else {
+        direction = "right"
+        cat.style.transform = "scaleX(1)"
+    }
+}
+
+// cat speed
+function catSpeed() {
+    speed -= 10
+    if (speed <= 0) {
+        speed = 10
+    }
+    clearInterval(catInterval)
+    catWalk()
+}
